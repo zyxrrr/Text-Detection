@@ -110,7 +110,7 @@ The detection results and recognition results are in "./demo_images"
         path_to_example1.jpg path_to_example1.xml
         path_to_example2.jpg path_to_example2.xml
             
-3. Run "./data/text/creat_data.sh"
+3. Run "./creat_data.sh"
     
 #### Start training
     
