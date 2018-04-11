@@ -8050,3 +8050,4 @@ I0411 20:24:48.206475 23994 sgd_solver.cpp:138] Iteration 70600, lr = 1e-05
 I0411 20:28:51.022958 23994 solver.cpp:243] Iteration 70700, loss = 0.593268
 I0411 20:28:51.023169 23994 solver.cpp:259]     Train net output #0: mbox_loss = 0.77646 (* 1 = 0.77646 loss)
 I0411 20:28:51.023206 23994 sgd_solver.cpp:138] Iteration 70700, lr = 1e-05
+
