@@ -136,7 +136,7 @@ def save_and_visu(image, results, config):
 		y4 = result[7]
 		result_str=str(x1)+','+str(y1)+','+str(x2)+','+str(y2)+','+str(x3)+','+str(y3)+','+str(x4)+','+str(y4)+','+str(score)+'\r\n'
 		det_fid.write(result_str)
-		if config['visu_detection']:
+		if config['visu_detection'] and sorce>config['f_score_threshold']:
 			quad = np.array([[x1,y1],[x2,y2],[x3,y3],[x4,y4]])
 			color_quad='r'
 			currentAxis.add_patch(plt.Polygon(quad, fill=False, edgecolor=color_quad, linewidth=2))
@@ -145,38 +145,6 @@ def save_and_visu(image, results, config):
 	if config['visu_detection']:
 		plt.axis('off')
 		plt.savefig(config['det_visu_path'], dpi=300)
-
-def visu_rec_results(image, rec_save_dir, f_score_threshold):
-	image_name=config['image_name']
-	result_file_path = os.path.join(rec_save_dir, image_name.split('.')[0]+'.txt')
-	rec_result_fid = open(result_file_path, 'r')
-	plt.clf()
-	plt.imshow(image)
-	currentAxis = plt.gca()
-	for line in rec_result_fid.readlines():
-		line=line.strip()
-		x1=int(line.split(',')[0])
-		y1=int(line.split(',')[1])
-		x2=int(line.split(',')[2])
-		y2=int(line.split(',')[3])
-		x3=int(line.split(',')[4])
-		y3=int(line.split(',')[5])
-		x4=int(line.split(',')[6])
-		y4=int(line.split(',')[7])
-		det_score=float(line.split(',')[8])
-		rec_score=float(line.split(',')[10])
-		rec_str=line.split(',')[9]
-		f_score = 2*math.exp(det_score)*math.exp(rec_score)/(math.exp(det_score)+math.exp(rec_score))
-		print(f_score)
-		if f_score>f_score_threshold:
-			quad = np.array([[x1,y1],[x2,y2],[x3,y3],[x4,y4]])
-			color_quad='r'
-			currentAxis.add_patch(plt.Polygon(quad, fill=False, edgecolor=color_quad, linewidth=2))
-			currentAxis.text(x1, y1, rec_str, fontsize=5)
-
-	rec_result_fid.close()
-	plt.axis('off')
-	plt.savefig(config['rec_visu_path'], dpi=300)
 
 
 # detection
