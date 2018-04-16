@@ -54,21 +54,21 @@ def AddExtraLayers(net, use_batchnorm=True, lr_mult=1):
     return net
 
 config = {
-	'run_soon': True,
-	'resume_training': True,
-	'remove_old_models': False,
-	'denser_prior_boxes': True,
-	'use_polygon': True,
-	'train_data': "./data/train_lmdb/",
-	'test_data': "./data/test_lmdb/",
-	'resize_width': 384,
-	'resize_height': 384,
-	'lr_mult': 1,
-	'base_lr': 0.0001,
-	'pretrain_model': "models/model_pre_train_syn.caffemodel",
-	'label_map_file': "data/text/labelmap_voc.prototxt",
-	'flip': True,
-	'clip': False,
+    'run_soon': True,
+    'resume_training': True,
+    'remove_old_models': False,
+    'denser_prior_boxes': True,
+    'use_polygon': True,
+    'train_data': "./data/train_lmdb/",
+    'test_data': "./data/test_lmdb/",
+    'resize_width': 384,
+    'resize_height': 384,
+    'lr_mult': 1,
+    'base_lr': 0.0001,
+    'pretrain_model': "models/model_pre_train_syn.caffemodel",
+    'label_map_file': "data/text/labelmap_voc.prototxt",
+    'flip': True,
+    'clip': False,
 }
 
 resize = "{}x{}".format(config['resize_width'], config['resize_height'])
@@ -231,7 +231,7 @@ train_transform_param = {
         }
 test_transform_param = {
         'mean_value': [104, 117, 123],
-	'force_color': True,
+    'force_color': True,
         'resize_param': {
                 'prob': 1,
                 'resize_mode': P.Resize.WARP,
@@ -275,7 +275,7 @@ loss_param = {
     }
 
 min_dim = 300
-mbox_source_layers = ['conv4_3', 'fc7', 'conv6_2', 'conv7_2', 'conv8_2', 'conv9_2']
+mbox_source_layers = ['conv3_3','conv4_3', 'fc7', 'conv6_2', 'conv7_2', 'conv8_2', 'conv9_2']
 # in percent %
 min_ratio = 10
 max_ratio = 90
@@ -285,13 +285,13 @@ max_sizes = []
 for ratio in xrange(min_ratio, max_ratio + 1, step):
   min_sizes.append(min_dim * ratio / 100.)
   max_sizes.append(min_dim * (ratio + step) / 100.)
-min_sizes = [min_dim * 10 / 100.] + min_sizes
-max_sizes = [min_dim * 20 / 100.] + max_sizes
-steps = [8, 16, 32, 64, 100, 300]
+min_sizes = [10] + min_sizes
+max_sizes = [30] + max_sizes
+steps = [4, 8, 16, 32, 64, 100, 300]
 # aspect_ratios = [[2], [2, 3], [2, 3], [2, 3], [2], [2]]
-aspect_ratios = [[2,3,4,5], [2,3,4,5], [2,3,4,5], [2,3,4,5], [2,3,4,5], [2,3,4,5]]
+aspect_ratios = [[2,3,4,5,7], [2,3,4,5,7], [2,3,4,5,7], [2,3,4,5,7], [2,3,4,5,7], [2,3,4,5,7], [2,3,4,5,7]]
 # L2 normalize conv4_3.
-normalizations = [20, -1, -1, -1, -1, -1]
+normalizations = [20, 20, -1, -1, -1, -1, -1]
 # normalizations = [20, 20, 20, 20, 20, 20]
 # variance used to encode/decode prior bboxes.
 if code_type == P.PriorBox.CENTER_SIZE:
