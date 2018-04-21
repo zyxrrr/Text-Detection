@@ -424,7 +424,7 @@ def VGGNetBody(net, from_layer, need_fc=True, fully_conv=False, reduced=False,
                 net.drop7 = L.Dropout(net.relu7, dropout_ratio=0.5, in_place=True)
 
     # Update freeze layers.
-    freeze_layers = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2']
+    #freeze_layers = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2']
     kwargs['param'] = [dict(lr_mult=0, decay_mult=0), dict(lr_mult=0, decay_mult=0)]
     layers = net.keys()
     for freeze_layer in freeze_layers:
