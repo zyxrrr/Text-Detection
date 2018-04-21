@@ -65,7 +65,7 @@ config = {
     'resize_height': 384,
     'lr_mult': 1,
     'base_lr': 0.0001,
-    'pretrain_model': "models/model_pre_train_syn.caffemodel",
+    'pretrain_model': "",
     'label_map_file': "data/text/labelmap_voc.prototxt",
     'flip': True,
     'clip': False,
