@@ -24,7 +24,7 @@ net.data, net.label = CreateAnnotatedDataLayer(config['train_data'], batch_size=
         transform_param=modelConfig.train_transform_param, batch_sampler=modelConfig.batch_sampler)
 
 VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,
-    dropout=False, freeze_layers = ['conv1_1', 'conv1_2', 'conv2_1', 'conv2_2'])
+    dropout=False)
 
 AddExtraLayers(net, False, lr_mult=config['lr_mult'])
 
