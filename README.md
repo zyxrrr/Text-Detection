@@ -31,7 +31,7 @@ compile TextBoxes++ (This is a modified version of caffe so you do not need to i
 ### Models
 
 model trained on ICPR MTWI 2018 text (used for testing):
-[BaiduYun](https://pan.baidu.com/s/1bqekTun)
+[BaiduYun](https://pan.baidu.com/s/1tlF3zjnEkA8dk7SoNpvv2A)
     
     Please place the above models in "./models/"
     
