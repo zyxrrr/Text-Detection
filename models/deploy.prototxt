@@ -1,10 +1,10 @@
-name: "VGG_text_text_polygon_ic15_fix_order_384x384_deploy"
+name: "VGG_text_text_polygon_precise_fix_order_384x384_deploy"
 input: "data"
 input_shape {
   dim: 1
   dim: 3
-  dim: 768
-  dim: 768
+  dim: 384
+  dim: 384
 }
 layer {
   name: "conv1_1"
@@ -12,11 +12,11 @@ layer {
   bottom: "data"
   top: "conv1_1"
   param {
-    lr_mult: 0.0
-    decay_mult: 0.0
+    lr_mult: 1.0
+    decay_mult: 1.0
   }
   param {
-    lr_mult: 0.0
+    lr_mult: 2.0
     decay_mult: 0.0
   }
   convolution_param {
@@ -44,11 +44,11 @@ layer {
   bottom: "conv1_1"
   top: "conv1_2"
   param {
-    lr_mult: 0.0
-    decay_mult: 0.0
+    lr_mult: 1.0
+    decay_mult: 1.0
   }
   param {
-    lr_mult: 0.0
+    lr_mult: 2.0
     decay_mult: 0.0
   }
   convolution_param {
@@ -87,11 +87,11 @@ layer {
   bottom: "pool1"
   top: "conv2_1"
   param {
-    lr_mult: 0.0
-    decay_mult: 0.0
+    lr_mult: 1.0
+    decay_mult: 1.0
   }
   param {
-    lr_mult: 0.0
+    lr_mult: 2.0
     decay_mult: 0.0
   }
   convolution_param {
@@ -119,11 +119,11 @@ layer {
   bottom: "conv2_1"
   top: "conv2_2"
   param {
-    lr_mult: 0.0
-    decay_mult: 0.0
+    lr_mult: 1.0
+    decay_mult: 1.0
   }
   param {
-    lr_mult: 0.0
+    lr_mult: 2.0
     decay_mult: 0.0
   }
   convolution_param {
@@ -810,6 +810,147 @@ layer {
   top: "conv9_2"
 }
 layer {
+  name: "conv3_3_norm"
+  type: "Normalize"
+  bottom: "conv3_3"
+  top: "conv3_3_norm"
+  norm_param {
+    across_spatial: false
+    scale_filler {
+      type: "constant"
+      value: 20.0
+    }
+    channel_shared: false
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_loc"
+  type: "Convolution"
+  bottom: "conv3_3_norm"
+  top: "conv3_3_norm_mbox_loc"
+  param {
+    lr_mult: 1.0
+    decay_mult: 1.0
+  }
+  param {
+    lr_mult: 2.0
+    decay_mult: 0.0
+  }
+  convolution_param {
+    num_output: 288
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.0
+    }
+    pad_h: 1
+    pad_w: 2
+    kernel_h: 3
+    kernel_w: 5
+    stride_h: 1
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_loc_perm"
+  type: "Permute"
+  bottom: "conv3_3_norm_mbox_loc"
+  top: "conv3_3_norm_mbox_loc_perm"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_loc_flat"
+  type: "Flatten"
+  bottom: "conv3_3_norm_mbox_loc_perm"
+  top: "conv3_3_norm_mbox_loc_flat"
+  flatten_param {
+    axis: 1
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_conf"
+  type: "Convolution"
+  bottom: "conv3_3_norm"
+  top: "conv3_3_norm_mbox_conf"
+  param {
+    lr_mult: 1.0
+    decay_mult: 1.0
+  }
+  param {
+    lr_mult: 2.0
+    decay_mult: 0.0
+  }
+  convolution_param {
+    num_output: 48
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.0
+    }
+    pad_h: 1
+    pad_w: 2
+    kernel_h: 3
+    kernel_w: 5
+    stride_h: 1
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_conf_perm"
+  type: "Permute"
+  bottom: "conv3_3_norm_mbox_conf"
+  top: "conv3_3_norm_mbox_conf_perm"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_conf_flat"
+  type: "Flatten"
+  bottom: "conv3_3_norm_mbox_conf_perm"
+  top: "conv3_3_norm_mbox_conf_flat"
+  flatten_param {
+    axis: 1
+  }
+}
+layer {
+  name: "conv3_3_norm_mbox_priorbox"
+  type: "PriorBox"
+  bottom: "conv3_3_norm"
+  bottom: "data"
+  top: "conv3_3_norm_mbox_priorbox"
+  prior_box_param {
+    min_size: 10.0
+    max_size: 30.0
+    aspect_ratio: 2.0
+    aspect_ratio: 3.0
+    aspect_ratio: 4.0
+    aspect_ratio: 5.0
+    aspect_ratio: 7.0
+    flip: true
+    clip: false
+    variance: 0.10000000149
+    variance: 0.10000000149
+    variance: 0.20000000298
+    variance: 0.20000000298
+    step: 4.0
+    offset: 0.5
+    denser_prior_boxes: true
+  }
+}
+layer {
   name: "conv4_3_norm"
   type: "Normalize"
   bottom: "conv4_3"
@@ -837,7 +978,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 240
+    num_output: 288
     weight_filler {
       type: "xavier"
     }
@@ -888,7 +1029,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 40
+    num_output: 48
     weight_filler {
       type: "xavier"
     }
@@ -933,11 +1074,12 @@ layer {
   top: "conv4_3_norm_mbox_priorbox"
   prior_box_param {
     min_size: 30.0
-    max_size: 60.0
+    max_size: 78.0
     aspect_ratio: 2.0
     aspect_ratio: 3.0
     aspect_ratio: 4.0
     aspect_ratio: 5.0
+    aspect_ratio: 7.0
     flip: true
     clip: false
     variance: 0.10000000149
@@ -963,7 +1105,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 240
+    num_output: 288
     weight_filler {
       type: "xavier"
     }
@@ -1014,7 +1156,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 40
+    num_output: 48
     weight_filler {
       type: "xavier"
     }
@@ -1058,12 +1200,13 @@ layer {
   bottom: "data"
   top: "fc7_mbox_priorbox"
   prior_box_param {
-    min_size: 30.0
-    max_size: 90.0
+    min_size: 78.0
+    max_size: 126.0
     aspect_ratio: 2.0
     aspect_ratio: 3.0
     aspect_ratio: 4.0
     aspect_ratio: 5.0
+    aspect_ratio: 7.0
     flip: true
     clip: false
     variance: 0.10000000149
@@ -1089,7 +1232,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 240
+    num_output: 288
     weight_filler {
       type: "xavier"
     }
@@ -1140,7 +1283,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 40
+    num_output: 48
     weight_filler {
       type: "xavier"
     }
@@ -1184,12 +1327,13 @@ layer {
   bottom: "data"
   top: "conv6_2_mbox_priorbox"
   prior_box_param {
-    min_size: 90.0
-    max_size: 150.0
+    min_size: 126.0
+    max_size: 174.0
     aspect_ratio: 2.0
     aspect_ratio: 3.0
     aspect_ratio: 4.0
     aspect_ratio: 5.0
+    aspect_ratio: 7.0
     flip: true
     clip: false
     variance: 0.10000000149
@@ -1215,7 +1359,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 240
+    num_output: 288
     weight_filler {
       type: "xavier"
     }
@@ -1266,7 +1410,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 40
+    num_output: 48
     weight_filler {
       type: "xavier"
     }
@@ -1310,12 +1454,13 @@ layer {
   bottom: "data"
   top: "conv7_2_mbox_priorbox"
   prior_box_param {
-    min_size: 150.0
-    max_size: 210.0
+    min_size: 174.0
+    max_size: 222.0
     aspect_ratio: 2.0
     aspect_ratio: 3.0
     aspect_ratio: 4.0
     aspect_ratio: 5.0
+    aspect_ratio: 7.0
     flip: true
     clip: false
     variance: 0.10000000149
@@ -1341,7 +1486,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 240
+    num_output: 288
     weight_filler {
       type: "xavier"
     }
@@ -1392,7 +1537,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 40
+    num_output: 48
     weight_filler {
       type: "xavier"
     }
@@ -1436,12 +1581,13 @@ layer {
   bottom: "data"
   top: "conv8_2_mbox_priorbox"
   prior_box_param {
-    min_size: 210.0
+    min_size: 222.0
     max_size: 270.0
     aspect_ratio: 2.0
     aspect_ratio: 3.0
     aspect_ratio: 4.0
     aspect_ratio: 5.0
+    aspect_ratio: 7.0
     flip: true
     clip: false
     variance: 0.10000000149
@@ -1467,7 +1613,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 240
+    num_output: 288
     weight_filler {
       type: "xavier"
     }
@@ -1518,7 +1664,7 @@ layer {
     decay_mult: 0.0
   }
   convolution_param {
-    num_output: 40
+    num_output: 48
     weight_filler {
       type: "xavier"
     }
@@ -1563,11 +1709,12 @@ layer {
   top: "conv9_2_mbox_priorbox"
   prior_box_param {
     min_size: 270.0
-    max_size: 330.0
+    max_size: 318.0
     aspect_ratio: 2.0
     aspect_ratio: 3.0
     aspect_ratio: 4.0
     aspect_ratio: 5.0
+    aspect_ratio: 7.0
     flip: true
     clip: false
     variance: 0.10000000149
@@ -1582,6 +1729,7 @@ layer {
 layer {
   name: "mbox_loc"
   type: "Concat"
+  bottom: "conv3_3_norm_mbox_loc_flat"
   bottom: "conv4_3_norm_mbox_loc_flat"
   bottom: "fc7_mbox_loc_flat"
   bottom: "conv6_2_mbox_loc_flat"
@@ -1596,6 +1744,7 @@ layer {
 layer {
   name: "mbox_conf"
   type: "Concat"
+  bottom: "conv3_3_norm_mbox_conf_flat"
   bottom: "conv4_3_norm_mbox_conf_flat"
   bottom: "fc7_mbox_conf_flat"
   bottom: "conv6_2_mbox_conf_flat"
@@ -1610,6 +1759,7 @@ layer {
 layer {
   name: "mbox_priorbox"
   type: "Concat"
+  bottom: "conv3_3_norm_mbox_priorbox"
   bottom: "conv4_3_norm_mbox_priorbox"
   bottom: "fc7_mbox_priorbox"
   bottom: "conv6_2_mbox_priorbox"
@@ -1671,7 +1821,7 @@ layer {
       top_k: 400
     }
     save_output_param {
-      output_directory: "./data/text/results/text/text_polygon_ic15_fix_order_384x384/Main"
+      output_directory: "/home/amax/data/text/results/text/text_polygon_precise_fix_order_384x384/Main"
       output_name_prefix: "comp4_det_test_"
       output_format: "VOC"
       label_map_file: "data/text/labelmap_voc.prototxt"
