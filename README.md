@@ -10,6 +10,7 @@ TextBoxes++ is a unified framework for oriented scene text detection with a sing
 3. [Models](#models)
 4. [Demo](#demo)
 5. [Train](#train)
+6. [Changed](#changed)
 
 ### Requirements
     g++-5; cuda8.0; cudnn V5.1 (cudnn 6 and cudnn 7 may fail); opencv3.0
@@ -61,3 +62,11 @@ The detection results and recognition results are in "./demo_images"
     
     1. modify the lmdb path in modelConfig.py
     2. Run "python examples/text/train.py"
+
+### Changed
+
+1. add prior box on conv3_3
+2. change aspect_ratios = [2,3,4,5,7]
+3. change box size: 
+[10, 30.0, 78.0, 126.0, 174.0, 222.0, 270.0]
+[30, 78.0, 126.0, 174.0, 222.0, 270.0, 318.0]
