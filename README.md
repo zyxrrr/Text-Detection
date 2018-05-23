@@ -68,5 +68,5 @@ The detection results and recognition results are in "./demo_images"
 1. add prior box on conv3_3
 2. change aspect_ratios = [2,3,4,5,7]
 3. change box size: 
-[10, 30.0, 78.0, 126.0, 174.0, 222.0, 270.0]
-[30, 78.0, 126.0, 174.0, 222.0, 270.0, 318.0]
+min_size=[10, 30.0, 78.0, 126.0, 174.0, 222.0, 270.0]
+max_size=[30, 78.0, 126.0, 174.0, 222.0, 270.0, 318.0]
